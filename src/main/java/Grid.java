@@ -2,6 +2,9 @@ import java.util.Arrays;
 
 public class Grid {
     private final char FOG = '~';
+    private final char SHIP = 'O';
+    private final char HIT = 'X';
+    private final char MISS = 'M';
 
     private char[][] gridArr = new char[10][10];
 
@@ -13,6 +16,10 @@ public class Grid {
 
     public char[][] getGrid() {
         return gridArr;
+    }
+
+    public void addShipToGrid(String[] coords) {
+
     }
 
 }

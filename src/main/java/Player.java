@@ -50,11 +50,25 @@ public class Player {
                     + "(" + currentShip.getLength() + " cells):");
             boolean invalid = true;
             while (invalid) {
-
+                String[] coords = scanner.nextLine().split(" ");
+                if (checkIfValid(coords[0].split("\\d"), coords[1].split("\\d"), currentShip.getLength())) {
+                    invalid = false;
+                    grid.addShipToGrid(coords);
+                } else {
+                    System.out.println("Invalid coordinates. Please enter again:");
+                }
             }
         }
     }
     public void setShipsRandom() {
 
+    }
+
+    private boolean checkIfValid(String[] first, String[] second, int length) {
+        int[] rowLetter = new int[]{(int) first[0].charAt(0), (int) second[0].charAt(0)};
+        int[] colNumber = new int[]{Integer.parseInt(first[1]), Integer.parseInt(second[1])};
+        int rowDistance = Math.abs(rowLetter[1] - rowLetter[0]);
+        int colDistance = Math.abs(colNumber[1] - colNumber[0]);
+        return rowDistance == length && colDistance == 0 || rowDistance == 0 && colDistance == 0;
     }
 }
