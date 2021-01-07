@@ -4,8 +4,9 @@
 
 public class Ship {
 
-    private String name;
+    private final String name;
     private int length;
+
 
     /**
      * Class constructor

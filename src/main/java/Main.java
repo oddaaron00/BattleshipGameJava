@@ -13,9 +13,11 @@ public class Main {
         player1.initShips();
         System.out.println("Do you want to set ships randomly? (Y/N)");
         if (scanner.nextLine().matches("(?i)Y|YES")) {
-            player1.setShips();
-        } else {
+            System.out.println("YES");
             player1.setShipsRandom();
+        } else {
+            System.out.println("NO");
+            player1.setShips();
         }
     }
 

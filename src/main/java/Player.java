@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Player {
@@ -47,13 +48,19 @@ public class Player {
         Scanner scanner = new Scanner(System.in);
         for (Ship currentShip : ships) {
             System.out.println("Enter the coordinates of the " + currentShip.getName()
-                    + "(" + currentShip.getLength() + " cells):");
+                    + " (" + currentShip.getLength() + " cells):");
             boolean invalid = true;
             while (invalid) {
                 String[] coords = scanner.nextLine().split(" ");
-                if (checkIfValid(coords[0].split("\\d"), coords[1].split("\\d"), currentShip.getLength())) {
+                int[][] parsedCoords = parseCoords(coords);
+                if (checkIfValid(parsedCoords, currentShip.getLength())) {
                     invalid = false;
-                    grid.addShipToGrid(coords);
+                    boolean successful = grid.addShipToGrid(parsedCoords);
+                    if (!successful) {
+                        invalid = true;
+                    } else {
+                        printGrid();
+                    }
                 } else {
                     System.out.println("Invalid coordinates. Please enter again:");
                 }
@@ -64,11 +71,21 @@ public class Player {
 
     }
 
-    private boolean checkIfValid(String[] first, String[] second, int length) {
-        int[] rowLetter = new int[]{(int) first[0].charAt(0), (int) second[0].charAt(0)};
-        int[] colNumber = new int[]{Integer.parseInt(first[1]), Integer.parseInt(second[1])};
-        int rowDistance = Math.abs(rowLetter[1] - rowLetter[0]);
-        int colDistance = Math.abs(colNumber[1] - colNumber[0]);
-        return rowDistance == length && colDistance == 0 || rowDistance == 0 && colDistance == 0;
+    /**
+     * @param coords - the coordinates the user inputted in the form {row1col1, row2col2}
+     * @return - the parsed coordinates in the form {{row1index, row2index}, {col1index, col2index}}
+     */
+    public static int[][] parseCoords(String[] coords) {
+        String[] first = coords[0].split("(?=\\d)", 2);
+        String[] second = coords[1].split("(?=\\d)", 2);
+        int[] rowLetter = new int[]{(int) first[0].charAt(0) - 65, (int) second[0].charAt(0) - 65};
+        int[] colNumber = new int[]{Integer.parseInt(first[1]) - 1, Integer.parseInt(second[1]) - 1};
+        return new int[][]{rowLetter, colNumber};
+    }
+
+    private boolean checkIfValid(int[][] parsedCoords, int length) {
+        int rowDistance = Math.abs(parsedCoords[0][1] - parsedCoords[0][0] + 1);
+        int colDistance = Math.abs(parsedCoords[1][1] - parsedCoords[1][0] + 1);
+        return rowDistance == length && colDistance == 1 || rowDistance == 1 && colDistance == length;
     }
 }
