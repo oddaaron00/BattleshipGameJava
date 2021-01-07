@@ -6,7 +6,7 @@ public class Grid {
     private final char HIT = 'X';
     private final char MISS = 'M';
 
-    private char[][] gridArr = new char[10][10];
+    private final char[][]gridArr = new char[10][10];
 
     public Grid() {
         for (int row = 0; row < 10; row++) {
