@@ -2,7 +2,7 @@ Ship.java
  Ship
 Grid.java
  Grid
-Main.java
- Main
 Player.java
  Player
+Main.java
+ Main

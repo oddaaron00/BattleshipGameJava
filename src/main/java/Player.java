@@ -26,6 +26,7 @@ public class Player {
     }
 
     public void printGrid() {
+        System.out.println("\n" + name);
         System.out.println("  1 2 3 4 5 6 7 8 9 10");
         char[][] x = grid.getGrid();
         int rowCodePoint = 65;
@@ -54,6 +55,7 @@ public class Player {
                     + " (" + currentShip.getLength() + " cells):");
             boolean valid = false;
             while (!valid) {
+                //TODO add user input check for the format col1row1 col2row2
                 String[] coords = scanner.nextLine().split(" ");
                 int[][] parsedCoords = parseCoords(coords);
                 if (checkIfValid(parsedCoords, currentShip.getLength())) {
