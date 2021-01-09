@@ -2,15 +2,13 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static Player player1;
+    public static Player player1, player2;
     public static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         greetPlayer();
         System.out.println("Starting new game...");
-        player1.setGrid();
         player1.printGrid();
-        player1.initShips();
         System.out.println("Do you want to set ships randomly? (Y/N)");
         if (scanner.nextLine().matches("(?i)Y|YES")) {
             System.out.println("YES");
@@ -19,6 +17,10 @@ public class Main {
             System.out.println("NO");
             player1.setShips();
         }
+        player1.printGrid();
+        player2 = new Player("Computer");
+        player2.setShipsRandom();
+        player2.printGrid();
     }
 
     private static void greetPlayer() {

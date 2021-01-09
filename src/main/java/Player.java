@@ -1,4 +1,6 @@
+import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Player {
     private final String name;
@@ -7,6 +9,8 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
+        this.setGrid();
+        this.initShips();
     }
 
     public String getName() {
@@ -17,7 +21,7 @@ public class Player {
         return ships;
     }
 
-    public void setGrid() {
+    private void setGrid() {
         grid = new Grid();
     }
 
@@ -34,7 +38,7 @@ public class Player {
         }
     }
 
-    public void initShips() {
+    private void initShips() {
         Ship carrier = new Ship("Carrier");
         Ship battleship = new Ship("Battleship");
         Ship cruiser = new Ship("Cruiser");
@@ -48,15 +52,15 @@ public class Player {
         for (Ship currentShip : ships) {
             System.out.println("Enter the coordinates of the " + currentShip.getName()
                     + " (" + currentShip.getLength() + " cells):");
-            boolean invalid = true;
-            while (invalid) {
+            boolean valid = false;
+            while (!valid) {
                 String[] coords = scanner.nextLine().split(" ");
                 int[][] parsedCoords = parseCoords(coords);
                 if (checkIfValid(parsedCoords, currentShip.getLength())) {
-                    invalid = false;
+                    valid = true;
                     boolean successful = grid.addShipToGrid(parsedCoords);
                     if (!successful) {
-                        invalid = true;
+                        valid = false;
                     } else {
                         printGrid();
                     }
@@ -67,7 +71,124 @@ public class Player {
         }
     }
     public void setShipsRandom() {
+        for (Ship currentShip : ships) {
+            boolean valid = false;
+            int[][] coords = new int[2][2];
+            while (!valid) {
+                int[] startingCoords = getRandomStartingPos();
+                coords[0][0] = startingCoords[0];
+                coords[1][0] = startingCoords[1];
+                int[] endingCoords = getEndingPos(startingCoords, currentShip.getLength());
+                coords[0][1] = endingCoords[0];
+                coords[1][1] = endingCoords[1];
+                if (endingCoords[0] != -1 && endingCoords[1] != -1) {
+                    valid = true;
+                }
+            }
+            grid.addShipToGrid(coords);
+        }
+    }
 
+    public int[] getRandomStartingPos() {
+        Random random = new Random();
+        boolean valid = false;
+        int randomRow = -1;
+        int randomCol = -1;
+        while (!valid) {
+            randomRow = random.nextInt(10);
+            randomCol = random.nextInt(10);
+            if (grid.getType(randomRow, randomCol) == grid.FOG) {
+                valid = true;
+            }
+        }
+        return new int[]{randomRow, randomCol};
+    }
+
+    public int[] getEndingPos(int[] start, int length) {
+        //{0, 1, 2, 3} correspond to {up, down, left, right}
+        int[] directions = new int[]{0, 1, 2, 3};
+        shuffleArray(directions);
+        boolean valid;
+        int[] endPos = new int[2];
+        for (int direction : directions) {
+            valid = true;
+            switch (direction) {
+                case 0:
+                    if (start[0] - length < 0) {
+                        valid = false;
+                        break;
+                    }
+                    for (int row = start[0]; row > start[0] - length; row--) {
+                        if (grid.getGrid()[row][start[1]] != grid.FOG) {
+                            valid = false;
+                            break;
+                        }
+                    }
+                    endPos[0] = start[0] - length + 1;
+                    endPos[1] = start[1];
+                    break;
+                case 1:
+                    if (start[0] + length > 10) {
+                        valid = false;
+                        break;
+                    }
+                    for (int row = start[0]; row < start[0] + length; row++) {
+                        if (grid.getGrid()[row][start[1]] != grid.FOG) {
+                            valid = false;
+                            break;
+                        }
+                    }
+                    endPos[0] = start[0] + length - 1;
+                    endPos[1] = start[1];
+                    break;
+                case 2:
+                    if (start[1] - length < 0) {
+                        valid = false;
+                        break;
+                    }
+                    for (int col = start[1]; col > start[1] - length; col--) {
+                        if (grid.getGrid()[start[0]][col] != grid.FOG) {
+                            valid = false;
+                            break;
+                        }
+                    }
+                    endPos[0] = start[0];
+                    endPos[1] = start[1] - length + 1;
+                    break;
+                case 3:
+                    if (start[1] + length > 10) {
+                        valid = false;
+                        break;
+                    }
+                    for (int col = start[1]; col < start[1] + length; col++) {
+                        if (grid.getGrid()[start[0]][col] != grid.FOG) {
+                            valid = false;
+                            break;
+                        }
+                    }
+                    endPos[0] = start[0];
+                    endPos[1] = start[1] + length - 1;
+                    break;
+            }
+            if (valid) {
+                return endPos;
+            }
+        }
+        return new int[]{-1, -1};
+    }
+
+    static void shuffleArray(int[] ar)
+    {
+        // If running on Java 6 or older, use `new Random()` on RHS here
+        Random rnd = ThreadLocalRandom.current();
+        for (int i = ar.length - 1; i > 0; i--)
+        {
+            int index = rnd.nextInt(i + 1);
+            // Simple swap
+            int a = ar[index];
+            ar[index] = ar[i];
+            ar[i] = a;
+        }
     }
 
     /**
@@ -83,8 +204,15 @@ public class Player {
     }
 
     private boolean checkIfValid(int[][] parsedCoords, int length) {
-        int rowDistance = Math.abs(parsedCoords[0][1] - parsedCoords[0][0] + 1);
-        int colDistance = Math.abs(parsedCoords[1][1] - parsedCoords[1][0] + 1);
+        for (int[] x : parsedCoords) {
+            for (int e : x) {
+                if (!(0 <= e && e < 10)) {
+                    return false;
+                }
+            }
+        }
+        int rowDistance = Math.abs(parsedCoords[0][1] - parsedCoords[0][0]) + 1;
+        int colDistance = Math.abs(parsedCoords[1][1] - parsedCoords[1][0]) + 1;
         return rowDistance == length && colDistance == 1 || rowDistance == 1 && colDistance == length;
     }
 }

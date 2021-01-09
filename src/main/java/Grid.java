@@ -1,12 +1,12 @@
 import java.util.Arrays;
 
 public class Grid {
-    private final char FOG = '~';
+    final char FOG = '~';
     private final char SHIP = 'O';
     private final char HIT = 'X';
     private final char MISS = 'M';
 
-    private final char[][]gridArr = new char[10][10];
+    private final char[][] gridArr = new char[10][10];
 
     public Grid() {
         for (int row = 0; row < 10; row++) {
@@ -17,6 +17,8 @@ public class Grid {
     public char[][] getGrid() {
         return gridArr;
     }
+
+    public char getType(int row, int col) { return gridArr[row][col]; }
 
     public boolean addShipToGrid(int[][] coords) {
         //The coordinate format is {{row1index, row2index}, {col1index, col2index}}

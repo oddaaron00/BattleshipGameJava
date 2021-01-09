@@ -1,7 +1,7 @@
-Grid.java
- Grid
 Ship.java
  Ship
+Grid.java
+ Grid
 Main.java
  Main
 Player.java
