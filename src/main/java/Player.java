@@ -5,13 +5,18 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Player {
     private final String name;
     private Ship[] ships;
-    private Grid grid;
+    private Grid grid, enemyGrid;
+    private boolean won = false;
 
     public Player(String name) {
         this.name = name;
         this.setGrid();
         this.initShips();
     }
+
+    public boolean hasWon() { return won; }
+
+    public void setWon(boolean won) { this.won = won; }
 
     public String getName() {
         return name;
@@ -23,6 +28,7 @@ public class Player {
 
     private void setGrid() {
         grid = new Grid();
+        enemyGrid = new Grid();
     }
 
     public void printGrid() {
@@ -216,5 +222,33 @@ public class Player {
         int rowDistance = Math.abs(parsedCoords[0][1] - parsedCoords[0][0]) + 1;
         int colDistance = Math.abs(parsedCoords[1][1] - parsedCoords[1][0]) + 1;
         return rowDistance == length && colDistance == 1 || rowDistance == 1 && colDistance == length;
+    }
+
+    public void takeTurn(Player currentPlayer, Player enemyPlayer) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choose a coordinate:");
+        String coordInput = "";
+        boolean validCoord = false;
+        int[] parsedCoord = new int[2];
+        //TODO add proper input validation
+        while (!validCoord) {
+            coordInput = scanner.nextLine();
+            validCoord = true;
+            String[] coordArr = coordInput.split("(?=\\d)", 2);
+            parsedCoord = new int[]{(int) coordArr[0].charAt(0) - 65, Integer.parseInt(coordArr[1]) - 1};
+            if (enemyPlayer.grid.getType(parsedCoord[0], parsedCoord[1]) != enemyPlayer.grid.FOG) {
+                System.out.println("You have previously chosen this coordinate. Please choose again");
+            } else {
+                validCoord = true;
+            }
+
+        }
+        if (enemyPlayer.grid.getType(parsedCoord[0], parsedCoord[1]) == enemyPlayer.grid.SHIP) {
+            System.out.println("Hit!");
+            currentPlayer.enemyGrid.setType(parsedCoord[0], parsedCoord[1], currentPlayer.grid.HIT);
+        } else {
+            System.out.println("Miss!");
+            currentPlayer.enemyGrid.setType(parsedCoord[0], parsedCoord[1], currentPlayer.grid.MISS);
+        }
     }
 }

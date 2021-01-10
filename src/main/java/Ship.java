@@ -6,6 +6,8 @@ public class Ship {
 
     private final String name;
     private int length;
+    private boolean sunk = false;
+    private int[] shipArr;
 
 
     /**
@@ -30,8 +32,11 @@ public class Ship {
                 this.length = 2;
                 break;
         }
+        this.shipArr = new int[length];
     }
 
+    public int[] getShipArr() { return shipArr; }
+    public boolean isSunk() { return sunk; }
     public String getName() {
         return name;
     }
@@ -39,4 +44,7 @@ public class Ship {
         return length;
     }
 
+    public void setSunk(boolean bool) { sunk = true; }
+
+    public void setShipArrStatus(int index) { shipArr[index] = 1; }
 }

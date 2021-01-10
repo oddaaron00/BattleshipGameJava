@@ -2,9 +2,9 @@ import java.util.Arrays;
 
 public class Grid {
     final char FOG = '~';
-    private final char SHIP = 'O';
-    private final char HIT = 'X';
-    private final char MISS = 'M';
+    final char SHIP = 'O';
+    final char HIT = 'X';
+    final char MISS = 'M';
 
     private final char[][] gridArr = new char[10][10];
 
@@ -16,6 +16,10 @@ public class Grid {
 
     public char[][] getGrid() {
         return gridArr;
+    }
+
+    public void setType(int row, int col, char type) {
+        gridArr[row][col] = type;
     }
 
     public char getType(int row, int col) { return gridArr[row][col]; }
@@ -30,9 +34,10 @@ public class Grid {
                 if (gridArr[row][index] == SHIP) {
                     System.out.println("Cannot place ship there");
                     return false;
-                } else {
-                    gridArr[row][index] = SHIP;
                 }
+            }
+            for (int index = smallerIndex; index <= largerIndex; index++) {
+                gridArr[row][index] = SHIP;
             }
         } else {
             int largerIndex = Math.max(coords[0][0], coords[0][1]);
@@ -42,9 +47,10 @@ public class Grid {
                 if (gridArr[index][col] == SHIP) {
                     System.out.println("Cannot place ship there. Please enter again:");
                     return false;
-                } else {
-                    gridArr[index][col] = SHIP;
                 }
+            }
+            for (int index = smallerIndex; index <= largerIndex; index++) {
+                gridArr[index][col] = SHIP;
             }
         }
         return true;

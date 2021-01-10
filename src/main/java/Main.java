@@ -8,6 +8,7 @@ public class Main {
     public static void main(String[] args) {
         playerOneInit();
         playerTwoInit();
+        play();
     }
 
     private static void greetPlayer() {
@@ -33,5 +34,23 @@ public class Main {
         player2 = new Player("Computer");
         player2.setShipsRandom();
         player2.printGrid();
+    }
+
+    private static void play() {
+        System.out.println("Start!");
+        boolean winner = false;
+        while (!winner) {
+            player1.takeTurn(player1, player2);
+            if (player1.hasWon()) {
+                winner = true;
+                System.out.println(player1.getName() + " has won!");
+            } else {
+                player2.takeTurn(player2, player1);
+                if (player2.hasWon()) {
+                    winner = true;
+                    System.out.println(player2.getName() + " has won!");
+                }
+            }
+        }
     }
 }
