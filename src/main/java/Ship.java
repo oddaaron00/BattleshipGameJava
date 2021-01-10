@@ -46,5 +46,5 @@ public class Ship {
 
     public void setSunk(boolean bool) { sunk = true; }
 
-    public void setShipArrStatus(int index) { shipArr[index] = 1; }
+    public void setHit(int index) { shipArr[index] = 1; }
 }

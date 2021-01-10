@@ -45,6 +45,20 @@ public class Player {
         }
     }
 
+    public void printEnemyGrid() {
+        System.out.println("\n" + name);
+        System.out.println("  1 2 3 4 5 6 7 8 9 10");
+        char[][] x = enemyGrid.getGrid();
+        int rowCodePoint = 65;
+        for (char[] row : x) {
+            System.out.print((char) rowCodePoint++);
+            for (char e : row) {
+                System.out.print(" " + e);
+            }
+            System.out.println();
+        }
+    }
+
     private void initShips() {
         Ship carrier = new Ship("Carrier");
         Ship battleship = new Ship("Battleship");
@@ -227,22 +241,21 @@ public class Player {
     public void takeTurn(Player currentPlayer, Player enemyPlayer) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose a coordinate:");
-        String coordInput = "";
+        String coordInput;
         boolean validCoord = false;
         int[] parsedCoord = new int[2];
-        //TODO add proper input validation
+        //TODO add proper input validation (make sure values are parsed to 0-9
         while (!validCoord) {
             coordInput = scanner.nextLine();
-            validCoord = true;
             String[] coordArr = coordInput.split("(?=\\d)", 2);
             parsedCoord = new int[]{(int) coordArr[0].charAt(0) - 65, Integer.parseInt(coordArr[1]) - 1};
-            if (enemyPlayer.grid.getType(parsedCoord[0], parsedCoord[1]) != enemyPlayer.grid.FOG) {
+            if (currentPlayer.enemyGrid.getType(parsedCoord[0], parsedCoord[1]) != currentPlayer.enemyGrid.FOG) {
                 System.out.println("You have previously chosen this coordinate. Please choose again");
             } else {
                 validCoord = true;
             }
-
         }
+        //TODO implement winning condition (all enemy ships sank)
         if (enemyPlayer.grid.getType(parsedCoord[0], parsedCoord[1]) == enemyPlayer.grid.SHIP) {
             System.out.println("Hit!");
             currentPlayer.enemyGrid.setType(parsedCoord[0], parsedCoord[1], currentPlayer.grid.HIT);

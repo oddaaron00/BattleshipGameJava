@@ -13,6 +13,7 @@ public class Main {
 
     private static void greetPlayer() {
         System.out.println("Welcome player! What should I call you?");
+        //TODO name validation - at least one character
         player1 = new Player(scanner.nextLine());
         System.out.println("Hello, " + player1.getName() + "!");
     }
@@ -36,20 +37,28 @@ public class Main {
         player2.printGrid();
     }
 
+
+    //TODO possibly tidy play()
     private static void play() {
-        System.out.println("Start!");
+        System.out.println("\nStart!");
         boolean winner = false;
         while (!winner) {
+            System.out.println(player1.getName() + "'s turn");
+            player1.printEnemyGrid();
             player1.takeTurn(player1, player2);
             if (player1.hasWon()) {
                 winner = true;
                 System.out.println(player1.getName() + " has won!");
             } else {
+                //TODO implement Computer AI logic
+                System.out.println("\nCOMPUTER AI LOGIC");
+                /*System.out.println(player2.getName() + "'s turn");
+                player2.printEnemyGrid();
                 player2.takeTurn(player2, player1);
                 if (player2.hasWon()) {
                     winner = true;
                     System.out.println(player2.getName() + " has won!");
-                }
+                }*/
             }
         }
     }
