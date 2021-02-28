@@ -55,6 +55,7 @@ public class Main {
             System.out.println(player1.getName() + "'s turn");
             player1.printEnemyGrid();
             player1.takeTurn(player1, player2);
+            checkWinner(player1);
             if (player1.hasWon()) {
                 winner = true;
                 System.out.println(player1.getName() + " has won!");
@@ -70,5 +71,8 @@ public class Main {
                 }*/
             }
         }
+    }
+
+    private static void checkWinner(Player player) {
     }
 }
