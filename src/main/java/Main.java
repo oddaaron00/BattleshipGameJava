@@ -13,8 +13,17 @@ public class Main {
 
     private static void greetPlayer() {
         System.out.println("Welcome player! What should I call you?");
-        //TODO name validation - at least one character
-        player1 = new Player(scanner.nextLine());
+        boolean validName = false;
+        String playerName = "";
+        while (!validName) {
+            playerName = scanner.nextLine();
+            if (!playerName.isBlank()) {
+                validName = true;
+            } else {
+                System.out.println("Name must contain at least one character!");
+            }
+        }
+        player1 = new Player(playerName);
         System.out.println("Hello, " + player1.getName() + "!");
     }
 
