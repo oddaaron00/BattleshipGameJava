@@ -215,7 +215,7 @@ public class Player {
 
     /**
      * @param coords - the coordinates the user inputted in the form {row1col1, row2col2}
-     * @return - the parsed coordinates in the form {{row1index, row2index}, {col1index, col2index}}
+     * @return Array - the parsed coordinates in the form {{row1index, row2index}, {col1index, col2index}}
      */
     public static int[][] parseCoords(String[] coords) {
         String[] first = coords[0].split("(?=\\d)", 2);
@@ -225,6 +225,12 @@ public class Player {
         return new int[][]{rowLetter, colNumber};
     }
 
+    /**
+     *
+     * @param parsedCoords - the parsed coordinates in the form {{row1index, row2index}, {col1index, col2index}}
+     * @param length - the length of the ship being placed
+     * @return boolean - whether position is valid or not
+     */
     private boolean checkIfValid(int[][] parsedCoords, int length) {
         for (int[] x : parsedCoords) {
             for (int e : x) {
