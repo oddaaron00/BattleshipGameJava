@@ -18,6 +18,11 @@ public class Grid {
         return gridArr;
     }
 
+    /**
+     * @param row - grid row coordinate
+     * @param col - grid column coordinate
+     * @param type - type of this coordinate (FOG, SHIP, HIT, MISS)
+     */
     public void setType(int row, int col, char type) {
         gridArr[row][col] = type;
     }

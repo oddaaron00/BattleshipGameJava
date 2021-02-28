@@ -250,7 +250,7 @@ public class Player {
         String coordInput;
         boolean validCoord = false;
         int[] parsedCoord = new int[2];
-        //TODO add proper input validation (make sure values are parsed to 0-9
+        //TODO add proper input validation (make sure values are parsed to 0-9)
         while (!validCoord) {
             coordInput = scanner.nextLine();
             String[] coordArr = coordInput.split("(?=\\d)", 2);
